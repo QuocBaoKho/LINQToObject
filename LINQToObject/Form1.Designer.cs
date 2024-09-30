@@ -257,6 +257,7 @@
             checkExpiredBTN.TabIndex = 22;
             checkExpiredBTN.Text = "Kiểm tra kho có SP quá hạn hay không";
             checkExpiredBTN.UseVisualStyleBackColor = true;
+            checkExpiredBTN.Click += checkExpiredBTN_Click;
             // 
             // removeAllExpiredBTN
             // 

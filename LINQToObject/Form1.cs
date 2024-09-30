@@ -5,10 +5,14 @@ namespace LINQToObject
     public partial class Form1 : Form
     {
         List<SanPham> sanPhams;
+        System.Windows.Forms.Timer timer1;
         public Form1()
         {
             InitializeComponent();
             sanPhams = new List<SanPham>();
+            timer1 = new System.Windows.Forms.Timer();
+            timer1.Interval = 1000;
+            timer1.Tick += Timer1_Tick;
             dataGridView1.AutoGenerateColumns = dataGridView2.AutoGenerateColumns = false;
             dataGridView1.Columns.Add("MaSP", "Mã SP");
             dataGridView1.Columns["MaSP"].DataPropertyName = "MaSP";
@@ -41,6 +45,13 @@ namespace LINQToObject
             expiredDatePicker.CustomFormat = " ";
 
         }
+
+        private void Timer1_Tick(object? sender, EventArgs e)
+        {
+            checkExpiredBTN.Text = "Kiểm tra kho có SP quá hạn hay không";        
+            timer1.Stop();
+        }
+
         bool isAllInfoFilled()
         {
             return !(string.IsNullOrEmpty(txtOrigin.Text) || string.IsNullOrEmpty(txtProductCode.Text) ||
@@ -253,7 +264,24 @@ namespace LINQToObject
         private void removeAllExpiredBTN_Click(object sender, EventArgs e)
         {
             sanPhams.RemoveAll(p => p.NgayHetHan < DateTime.Now);
-            UpdateGridView2Alt(); 
+            UpdateGridView2Alt();
+        }
+
+        private void checkExpiredBTN_Click(object sender, EventArgs e)
+        {
+            if (sanPhams.Count > 0)
+            {
+                if (sanPhams.Exists(p => p.NgayHetHan < DateTime.Now))
+                {
+                    checkExpiredBTN.Text += " 😊";
+                }
+                else
+                {
+                    checkExpiredBTN.Text += " 🤷";
+                }
+                timer1.Start();
+
+            }
         }
     }
 }
